@@ -5,6 +5,8 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { User } from "./entities/user.entity";
 import { MetricsMiddleware } from "./metrics.middleware";
+import { UsersController } from "./users.controller";
+import { UsersService } from "./users.service";
 
 const userForFeature = TypeOrmModule.forFeature([User]);
 
@@ -28,8 +30,8 @@ const userForFeature = TypeOrmModule.forFeature([User]);
     }),
     userForFeature,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, UsersController],
+  providers: [AppService, UsersService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
