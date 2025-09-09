@@ -1,0 +1,13 @@
+stages:
+  - test
+
+check-runner:
+  stage: test
+  tags:
+    - docker   # runner tag we gave earlier
+  image: alpine:latest
+  script:
+    - echo "✅ GitLab Runner is working!"
+    - echo "Running inside $(cat /etc/os-release | grep PRETTY_NAME)"
+    - apk add --no-cache docker-cli
+    - docker --version
