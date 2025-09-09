@@ -21,7 +21,7 @@ build-image:
     - docker push $IMAGE:$CI_COMMIT_SHA
     - docker push $IMAGE:latest
   only:
-    - main
+    - master
 
 deploy:
   stage: deploy
@@ -31,4 +31,4 @@ deploy:
   script:
     - 'curl -X POST "$DOKPLOY_WEBHOOK_URL"'
   only:
-    - main
+    - master
