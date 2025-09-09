@@ -3,7 +3,7 @@ stages:
   - deploy
 
 variables:
-  IMAGE: "$REGISTRY_URL/dragospaul/bun-nestjs"
+  IMAGE: "$CI_REGISTRY_IMAGE"   # built-in: registry.gitlab.verdedata.ro/dragospaul/bun-nestjs
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
 
@@ -11,12 +11,15 @@ build-image:
   stage: build
   tags:
     - docker
-  image: docker:28.4-cli        # job container with docker client
+  image: docker:28.4-cli
   services:
-    - docker:28.4-dind          # DinD sidecar for builds
+    - docker:28.4-dind
   script:
-    - echo "$REGISTRY_PASS" | docker login $REGISTRY_URL -u "$REGISTRY_USER" --password-stdin
+    # Log in with built-in CI job token
+    - echo "$CI_JOB_TOKEN" | docker login "$CI_REGISTRY" -u gitlab-ci-token --password-stdin
+    # Build + tag images
     - docker build -t $IMAGE:$CI_COMMIT_SHA -t $IMAGE:latest .
+    # Push both commit SHA tag and latest
     - docker push $IMAGE:$CI_COMMIT_SHA
     - docker push $IMAGE:latest
   only:
