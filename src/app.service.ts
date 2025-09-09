@@ -41,7 +41,7 @@ export class AppService {
     return `
     <html>
       <body>
-        <h1>How to use the app REST API</h1>
+        <h1>How to use the API</h1>
         <table>
           <thead>
             <tr>
