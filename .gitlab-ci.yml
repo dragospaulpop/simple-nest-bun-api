@@ -3,18 +3,17 @@ stages:
   - deploy
 
 variables:
-  DOCKER_TLS_CERTDIR: ""   # disable TLS dir inside DinD
-  DOCKER_DRIVER: overlay2
   IMAGE: "$REGISTRY_URL/dragospaul/bun-nestjs"
-
-services:
-  - docker:dind
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
 
 build-image:
   stage: build
   tags:
-    - docker   # must match your runner tag
-  image: alpine:latest
+    - docker
+  image: docker:28.4-cli        # job container with docker client
+  services:
+    - docker:28.4-dind          # DinD sidecar for builds
   script:
     - echo "$REGISTRY_PASS" | docker login $REGISTRY_URL -u "$REGISTRY_USER" --password-stdin
     - docker build -t $IMAGE:$CI_COMMIT_SHA -t $IMAGE:latest .
