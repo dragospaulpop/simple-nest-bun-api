@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { PrometheusModule } from "@willsoto/nestjs-prometheus";
+import { LoggerModule } from "nestjs-pino";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { User } from "./entities/user.entity";
@@ -12,6 +13,7 @@ const userForFeature = TypeOrmModule.forFeature([User]);
 
 @Module({
   imports: [
+    LoggerModule.forRoot(),
     TypeOrmModule.forRoot({
       type: "postgres",
       host: process.env.POSTGRES_HOST,

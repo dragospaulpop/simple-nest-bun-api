@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 
 const links = [
   {
@@ -37,7 +37,10 @@ const links = [
 export class AppService {
   constructor() {}
 
+  private readonly logger = new Logger(AppService.name);
+
   async index(): Promise<string> {
+    this.logger.log("Index page");
     return `
     <html>
       <body>
